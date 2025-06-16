@@ -1,0 +1,47 @@
+from pwn import *
+import random
+import time
+
+def read_coil(conn, uid, start_address):
+        packet = random.randbytes(2)   # transaction_id (2 bytes)
+        packet += b'\x00\x00'     # protocol_id (2 bytes)
+        packet += b'\x00\x06'             # length (2 bytes)
+        packet += p8(uid)                 # unit_id (1 byte)
+        packet += b'\x01'                # function_code (1 byte)
+        packet += p16(start_address-1, endian = 'big')
+        packet += b'\x00\x01'
+        conn.send(packet)
+        response = conn.recv()
+        if response[-2] < 0x80:
+                return True
+        else:
+                return False
+
+def write_coil(conn, uid, start_address, value):
+        packet = random.randbytes(2)
+        packet += b'\x00\x00'
+        packet += b'\x00\x06'
+        packet += p8(uid)
+        packet += b'\x05'
+        packet += p16 (start_address-1, endian = 'big')
+        packet += b'\xff\x00' if value else b'\x00\x00'
+        conn.send(packet)
+        response = conn.recv()
+
+def read_hregister (conn, uid, start_address):
+        packet = random.randbytes(2)
+        packet += b'\x00\x00'
+        packet += b'\x00\x06'
+        packet += p8(uid)
+        packet += b'\x03'
+        packet += p16 (start_address-1, endian = 'big')
+        packet += b'\x00\x01'
+        conn.send(packet)
+        response = conn.recv()
+        return response[-1]
+
+r = remote ('127.0.0.1', 502)
+for i in range (1300, 1400):
+        write_coil (r, 25, i, True)
+        print (i)
+        time.sleep (0.5)
