@@ -42,4 +42,4 @@ This exercise was conducted in a virtualized academic environment for educationa
 
 ---
 
-**Repository**: [lagentefuerte/Practica-Proteccion-Infraestructuras-Criticas](https://github.com/lagentefuerte/Practica-Proteccion-Infraestructuras-Criticas)
+**Repository**: [mdiazbenito/Practica-Proteccion-Infraestructuras-Criticas](https://github.com/mdiazbenito/Practica-Proteccion-Infraestructuras-Criticas)
